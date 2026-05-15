@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sachini Girl Video Fun</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background: #e5ddd5; display: flex; justify-content: center; align-items: center; height: 100vh; }
+
+        /* Login Screen */
+        #login-screen { background: white; padding: 30px; border-radius: 15px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2); width: 320px; }
+        input { width: 100%; padding: 12px; margin: 15px 0; border: 1px solid #ddd; border-radius: 8px; outline: none; }
+        .start-btn { width: 100%; padding: 12px; background: #075e54; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+
+        /* Chat Screen */
+        #chat-screen { display: none; width: 100%; max-width: 450px; height: 95vh; background: #fff; flex-direction: column; box-shadow: 0 5px 20px rgba(0,0,0,0.1); border-radius: 10px; overflow: hidden; position: relative; }
+        .header { background: #075e54; color: white; padding: 15px; display: flex; align-items: center; justify-content: space-between; }
+        .status-info { font-size: 11px; color: #cfd8dc; }
+        
+        .chat-box { flex: 1; padding: 15px; overflow-y: auto; background: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); display: flex; flex-direction: column; }
+        .msg { margin-bottom: 12px; padding: 10px 15px; border-radius: 12px; max-width: 85%; font-size: 15px; position: relative; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+        .received { background: #fff; align-self: flex-start; border-bottom-left-radius: 2px; }
+        .sent { background: #dcf8c6; align-self: flex-end; border-bottom-right-radius: 2px; }
+        
+        #typing { font-size: 12px; color: #555; margin-bottom: 10px; display: none; font-style: italic; }
+
+        .input-area { padding: 10px; display: flex; gap: 8px; background: #f0f0f0; }
+        .input-area input { flex: 1; padding: 12px; border: none; border-radius: 25px; outline: none; }
+        .send-btn { background: #075e54; color: white; border: none; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    </style>
+</head>
+<body>
+
+    <!-- Login Area -->
+    <div id="login-screen">
+        <h2 style="color: #075e54;">Sachini Girl Video Fun</h2>
+        <input type="text" id="username" placeholder="ඔයාගේ නම මෙතන ගහන්න...">
+        <button class="start-btn" onclick="startChat()">Chat එකට යන්න</button>
+    </div>
+
+    <!-- Chat Area -->
+    <div id="chat-screen">
+        <div class="header">
+            <div>
+                <strong style="font-size: 18px;">Sachini Girl</strong><br>
+                <span id="online-status" class="status-info">Online Now</span>
+            </div>
+            <div style="cursor: pointer;">📞 &nbsp; 📹</div>
+        </div>
+        
+        <div class="chat-box" id="chat-box">
+            <div class="msg received">Hi! Mama Sachini. ❤️ ඔයාගේ නම මොකක්ද?</div>
+            <div id="typing">Sachini is typing...</div>
+        </div>
+
+        <div class="input-area">
+            <input type="text" id="msg-input" placeholder="Type a message..." onkeypress="if(event.key==='Enter') sendMessage()">
+            <button class="send-btn" onclick="sendMessage()">➤</button>
+        </div>
+    </div>
+
+    <script>
+        function startChat() {
+            let name = document.getElementById('username').value;
+            if(name.trim() !== "") {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('chat-screen').style.display = 'flex';
+            } else {
+                alert("කරුණාකර නමක් ඇතුලත් කරන්න!");
+            }
+        }
+
+        function sendMessage() {
+            let input = document.getElementById('msg-input');
+            let box = document.getElementById('chat-box');
+            let typingIndicator = document.getElementById('typing');
+            let status = document.getElementById('online-status');
+            let text = input.value.trim().toLowerCase();
+
+            if(text !== "") {
+                // User Message
+                box.insertBefore(createMsgElement(input.value, 'sent'), typingIndicator);
+                input.value = "";
+                box.scrollTop = box.scrollHeight;
+
+                // Typing Effect
+                typingIndicator.style.display = "block";
+                status.innerText = "typing...";
+
+                setTimeout(() => {
+                    let reply = "";
+                    
+                    if (text === "hi" || text === "hello" || text === "hallow") {
+                        reply = "Ane mama oyath ekka chat karanna balan hitiye! 😊";
+                    } 
+                    else if (text.includes("price") || text.includes("kiyada") || text.includes("ganan")) {
+                        reply = "Meka thamayi mage prices:<br>✅ විනාඩි 15 - Rs. 500<br>✅ විනාඩි 30 - Rs. 1000<br>✅ පැය 1 - Rs. 1500";
+                    } 
+                    else if (text.includes("kawuda") || text.includes("kawda") || text.includes("who are you")) {
+                        reply = "Mama Sachini Girl. ඔයා එක්ක fun එකක් ගන්න තමයි මම ඉන්නේ.";
+                    } 
+                    else if (text === "hari" || text === "ok" || text === "okay" || text === "hari hari") {
+                        reply = "හරි එහෙනම්, අපි දැන් video call එකක් ගමු! ❤️";
+                    } 
+                    else {
+                        reply = "Mata therune na patiyo.. Price kiyada kiyala hari oya kawda kiyala hari ahanna..";
+                    }
+
+                    typingIndicator.style.display = "none";
+                    status.innerText = "Online Now";
+                    box.insertBefore(createMsgElement(reply, 'received'), typingIndicator);
+                    box.scrollTop = box.scrollHeight;
+                }, 1500); // 1.5 seconds delay
+            }
+        }
+
+        function createMsgElement(text, type) {
+            let div = document.createElement('div');
+            div.className = 'msg ' + type;
+            div.innerHTML = text;
+            return div;
+        }
+    </script>
+
+</body>
+</html>
